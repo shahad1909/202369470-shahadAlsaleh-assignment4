@@ -839,6 +839,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  
+  // Tab: completes the last word (a command name, a link name, or a file/folder name)
+  function autocomplete() {
+    const words = terminalInput.value.split(' ');
+    const lastWord = words[words.length - 1];
+    let options;
+    let folderPart = '';   // e.g. "projects/" in "cat projects/fi"
+
+    if (words.length === 1) {
+      options = Object.keys(commands);   // first word: a command name
+    } else if (words[0].toLowerCase() === 'open') {
+      options = Object.keys(links);      // "open": a link name
+    } else {
+      // Anything else: a file or folder name (the part before the last "/" is the folder)
+      folderPart = lastWord.slice(0, lastWord.lastIndexOf('/') + 1);
+      const folder = getNode(resolvePath(folderPart || '.'));
+
+      if (!folder || typeof folder !== 'object') {
+        return;   // not a real folder (note: typeof null is also "object", so we check !folder first)
+      }
+
+      options = Object.keys(folder).map(name => (typeof folder[name] === 'object' ? `${name}/` : name));
+    }
+
+    const typed = lastWord.slice(folderPart.length);
+    const matches = options.filter(option => option.startsWith(typed));
+
+    if (matches.length === 1) {
+      words[words.length - 1] = folderPart + matches[0];   // complete the word
+      terminalInput.value = words.join(' ');
+    } else if (matches.length > 1) {
+      printLine(matches.join('   '));   // several options: show them all
+    }
+  }
+
   // Show the welcome message as soon as the page loads
   showWelcome();
 
@@ -877,6 +912,11 @@ document.addEventListener('DOMContentLoaded', () => {
         historyIndex = commandHistory.length;   // past the newest: empty field
         terminalInput.value = '';
       }
+    }
+    else if (e.key === 'Tab' && terminalInput.value.trim() !== '') {
+      // Only when there is text, so keyboard users can still Tab out of an empty terminal
+      e.preventDefault();
+      autocomplete();
     }
   });
 
