@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
   }
 
-
   // On page load: saved choice first, otherwise follow the device setting
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(readSetting('theme') || (prefersDark ? 'dark' : 'light'));
@@ -68,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-/* Smooth Scrolling Between Sections */
+  /* Smooth Scrolling Between Sections */
   const navAnchors = document.querySelectorAll('a[href^="#"]');
   const navbar = document.querySelector('.navbar');
 
@@ -91,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
-
 
   /*Greeting Message by Time of Day*/
   const greetingEl = document.getElementById('greeting');
@@ -288,7 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return currentSort === 'oldest' ? difference : -difference;
   }
 
-
   // Applies the current filter and sort, then updates the page
   function updateProjects() {
     const sortedRows = [...projectRows].sort(compareProjects);
@@ -300,9 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (isVisible) {
         visibleCount++;
-      
-
-      // Number the visible projects in their current order (01, 02, 03...)
+        // Number the visible projects in their current order (01, 02, 03...)
         row.querySelector('.project-index').textContent = String(visibleCount).padStart(2, '0');
       }
 
@@ -426,8 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
-
   async function loadRepoInfo(metaEl) {
     const repo = metaEl.dataset.repo;
 
@@ -472,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-// Load all repos at the same time and keep each request's Promise
+  // Load all repos at the same time and keep each request's Promise
   const repoRequests = Array.from(repoMetaEls).map(loadRepoInfo);
 
   // Wait until every request has finished (success or error) before sorting
