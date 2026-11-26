@@ -617,6 +617,47 @@ document.addEventListener('DOMContentLoaded', () => {
     terminalPrompt.textContent = `shahad@portfolio:${formatPath(currentPath)}$`;
   }
 
+  // Prints a folder as a tree; calls itself for every sub-folder (recursion)
+  function printTree(folder, indent) {
+    const names = Object.keys(folder);
+
+    names.forEach((name, index) => {
+      const isLast = index === names.length - 1;
+      const isFolder = typeof folder[name] === 'object';
+
+      printLine(`${indent}${isLast ? '└── ' : '├── '}${name}${isFolder ? '/' : ''}`);
+
+      if (isFolder) {
+        // Go one level deeper, with a longer indent
+        printTree(folder[name], indent + (isLast ? '    ' : '│   '));
+      }
+    });
+  }
+
+  // Searches every file inside a folder (and its sub-folders) for a word.
+  // Prints each matching line with its file path, and returns how many were found.
+  function grepFolder(folder, prefix, word) {
+    let count = 0;
+
+    Object.keys(folder).forEach(name => {
+      const node = folder[name];
+      const path = prefix + name;
+
+      if (typeof node === 'object') {
+        count += grepFolder(node, `${path}/`, word);   // search inside the sub-folder
+      } else {
+        node.split('\n').forEach(line => {
+          if (line.toLowerCase().includes(word)) {
+            printLine(`${path}: ${line}`);
+            count++;
+          }
+        });
+      }
+    });
+
+    return count;
+  }
+
   // All terminal commands: a short description (listed by "help") and the function that runs it
   const commands = {
     help: {
@@ -674,6 +715,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     },
+
+    pwd: {
+      description: 'Show the current folder',
+      run() {
+        printLine(formatPath(currentPath));
+      }
+    },
+
+    cat: {
+      description: 'Show a file (e.g. cat about.txt)',
+      run(args) {
+        if (!args[0]) {
+          printLine('cat: missing file name. Try: cat about.txt', 'error');
+          return;
+        }
+
+        const node = getNode(resolvePath(args[0]));
+
+        if (node === null) {
+          printLine(`cat: ${args[0]}: No such file or directory`, 'error');
+        } else if (typeof node === 'object') {
+          printLine(`cat: ${args[0]}: Is a directory`, 'error');
+        } else {
+          printLine(node);   // the file's text (each \n shows as a new line)
+        }
+      }
+    },
+
+    
+    tree: {
+      description: 'Show all files and folders as a tree',
+      run() {
+        printLine(formatPath(currentPath));   // the starting folder, e.g. "~"
+        printTree(getNode(currentPath), '');
+      }
+    },
+
+    
+    grep: {
+      description: 'Search all files for a word (e.g. grep java)',
+      run(args) {
+        const word = args.join(' ').replace(/"/g, '').toLowerCase();
+
+        if (word === '') {
+          printLine('grep: missing word. Try: grep java', 'error');
+          return;
+        }
+
+        const found = grepFolder(getNode(currentPath), '', word);
+
+        if (found === 0) {
+          printLine(`grep: no results for "${word}"`, 'error');
+        }
+      }
+    }
+
+
   };
 
   // Splits the input into a command name and its arguments, then runs it
