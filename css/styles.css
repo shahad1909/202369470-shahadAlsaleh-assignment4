@@ -809,6 +809,7 @@ img {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-soft);
   overflow: hidden;   /* keeps the inner parts inside the rounded corners */
+  border: 1px solid #3a3140;   /* makes the window edge visible in dark mode */
 }
 
 /* Title bar with the three dots */
