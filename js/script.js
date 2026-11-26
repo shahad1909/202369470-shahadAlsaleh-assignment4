@@ -499,6 +499,72 @@ document.addEventListener('DOMContentLoaded', () => {
   updateVisitTimer();
   setInterval(updateVisitTimer, 1000);
 
+  /* Terminal: explore the portfolio with shell-style commands */
+  const terminalForm = document.getElementById('terminal-form');
+  const terminalInput = document.getElementById('terminal-input');
+  const terminalOutput = document.getElementById('terminal-output');
+  const terminalPrompt = document.getElementById('terminal-prompt');
+
+  // Adds one line to the terminal output.
+  // type: '' (normal), 'command' (what the user typed), or 'error'
+  function printLine(text, type = '') {
+    const line = document.createElement('p');
+    line.className = type ? `terminal-line ${type}` : 'terminal-line';
+    line.textContent = text;   // safe: shown as plain text, never run as HTML
+    terminalOutput.append(line);
+
+    // Scroll to the newest line
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  }
+
+  // All terminal commands: a short description (listed by "help") and the function that runs it
+  const commands = {
+    help: {
+      description: 'Show all available commands',
+      run() {
+        printLine('Available commands:');
+        Object.entries(commands).forEach(([name, cmd]) => {
+          printLine(`  ${name.padEnd(10)} ${cmd.description}`);
+        });
+      }
+    },
+
+    clear: {
+      description: 'Clear the terminal screen',
+      run() {
+        terminalOutput.textContent = '';   // remove every line
+      }
+    }
+  };
+
+  // Splits the input into a command name and its arguments, then runs it
+  function runCommand(input) {
+    const [name, ...args] = input.split(/\s+/);
+    const commandName = name.toLowerCase();
+
+    // Object.hasOwn ignores built-in names like "toString", so only our commands run
+    if (Object.hasOwn(commands, commandName)) {
+      commands[commandName].run(args);
+    } else {
+      printLine(`command not found: ${name}. Type "help" to see all commands.`, 'error');
+    }
+  }
+
+  terminalForm.addEventListener('submit', (e) => {
+    e.preventDefault();   // stop the page from reloading
+
+    const command = terminalInput.value.trim();
+    terminalInput.value = '';   // empty the field for the next command
+
+    if (command === '') {
+      return;   // nothing typed: do nothing
+    }
+
+    // Show the typed command with the current prompt, like a real terminal
+    printLine(`${terminalPrompt.textContent} ${command}`, 'command');
+    runCommand(command);
+  });
+
   /* Footer Year */
   document.getElementById('year').textContent = new Date().getFullYear();
 

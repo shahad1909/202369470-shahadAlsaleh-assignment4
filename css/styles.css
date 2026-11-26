@@ -847,6 +847,14 @@ img {
   line-height: 1.6;
 }
 
+.terminal-line.command {
+  color: var(--sage);
+}
+
+.terminal-line.error {
+  color: #ef8fa5;
+}
+
 /* Input line: prompt + text field */
 .terminal-input-line {
   display: flex;
