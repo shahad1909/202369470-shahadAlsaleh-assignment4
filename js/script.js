@@ -517,6 +517,106 @@ document.addEventListener('DOMContentLoaded', () => {
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
   }
 
+  
+  // First lines shown when the page opens (and after "clear")
+  function showWelcome() {
+    printLine('Welcome to Shahad\'s portfolio terminal!');
+    printLine('Type "help" to see what you can do.');
+  }
+
+  
+  // The portfolio as a small file system (same idea as my Java File System Simulator):
+  // a folder is an object (name → content), a file is a string (its text)
+  const fileSystem = {
+    'about.txt': [
+      'Shahad Sultan Alsaleh, Computer Science student at KFUPM.',
+      'I turn problems into code, and I like exploring how systems work under the hood.',
+      'Hobbies: photography, reading, coloring, swimming, and design.'
+    ].join('\n'),
+
+    'skills.txt': [
+      'Java, Python, Machine Learning, Data Structures, Verilog HDL, Problem Solving',
+      'Web: HTML, CSS, JavaScript, GitHub REST API'
+    ].join('\n'),
+
+    'achievements.txt': [
+      "2025  First Class Honors",
+      "2025  Dean's List (Top 10% in the College of Computing and Mathematics)",
+      'STEP  English proficiency score: 87/100'
+    ].join('\n'),
+
+    'contact.txt': [
+      'Use the contact form below this terminal to send me a message.',
+      'GitHub: github.com/shahad1909'
+    ].join('\n'),
+
+    projects: {
+      'file-system-simulator.txt': [
+        'A Java command-line file system with Unix-like commands.',
+        'Custom tree, generic stack (for pwd), and KMP search (for grep).',
+        'This terminal is a web version of it!'
+      ].join('\n'),
+
+      'smart-pedestrian-crossing.txt': [
+        'Traffic lights for three roads and a pedestrian crossing.',
+        'Verilog HDL on a Nexys A7 FPGA, using a 4-state Moore FSM and a 7-segment countdown.'
+      ].join('\n'),
+
+      'mobile-price-classification.txt': [
+        'Predicts mobile price ranges from hardware specs.',
+        'Compared KNN, SVM, and MLP. A linear SVM reached 95.3% accuracy.'
+      ].join('\n')
+    }
+  };
+
+  // Where the user is now, as a list of folder names ([] = home "~")
+  let currentPath = [];
+
+  // Turns what the user typed (e.g. "projects", "..", "~/projects/x.txt") into a full path list
+  function resolvePath(target) {
+    // Paths starting with "~" or "/" start from home, others from the current folder
+    const parts = target.startsWith('~') || target.startsWith('/') ? [] : [...currentPath];
+
+    target.split('/').forEach(part => {
+      if (part === '' || part === '.' || part === '~') {
+        return;   // nothing to do for these
+      }
+
+      if (part === '..') {
+        parts.pop();    // go back one folder
+      } else {
+        parts.push(part);   // go into this folder or file
+      }
+    });
+
+    return parts;
+  }
+
+  // Walks the file system along a path list; returns the folder (object), file (string), or null
+  function getNode(parts) {
+    let node = fileSystem;
+
+    for (const part of parts) {
+      if (typeof node !== 'object' || !Object.hasOwn(node, part)) {
+        return null;   // the path does not exist
+      }
+      node = node[part];
+    }
+
+    return node;
+  }
+
+  
+  // Turns a path list into text: [] → "~", ['projects'] → "~/projects"
+  function formatPath(parts) {
+    return '~' + parts.map(part => `/${part}`).join('');
+  }
+
+  // Shows the current folder in the prompt, like a real terminal
+  function updatePrompt() {
+    terminalPrompt.textContent = `shahad@portfolio:${formatPath(currentPath)}$`;
+  }
+
   // All terminal commands: a short description (listed by "help") and the function that runs it
   const commands = {
     help: {
@@ -533,8 +633,47 @@ document.addEventListener('DOMContentLoaded', () => {
       description: 'Clear the terminal screen',
       run() {
         terminalOutput.textContent = '';   // remove every line
+        showWelcome();
       }
-    }
+    },
+
+    ls: {
+      description: 'List files and folders (e.g. ls, ls projects)',
+      run(args) {
+        const target = args[0] || '.';
+        const node = getNode(resolvePath(target));
+
+        if (node === null) {
+          printLine(`ls: ${target}: No such file or directory`, 'error');
+        } else if (typeof node === 'string') {
+          printLine(target);   // a file: just show its name, like Linux
+        } else {
+          // A folder: show each item, with "/" after folder names
+          Object.keys(node).forEach(name => {
+            const isFolder = typeof node[name] === 'object';
+            printLine(isFolder ? `${name}/` : name);
+          });
+        }
+      }
+    },
+
+    cd: {
+      description: 'Change folder (e.g. cd projects, cd .., cd ~)',
+      run(args) {
+        const target = args[0] || '~';   // "cd" alone goes home, like Linux
+        const parts = resolvePath(target);
+        const node = getNode(parts);
+
+        if (node === null) {
+          printLine(`cd: ${target}: No such file or directory`, 'error');
+        } else if (typeof node === 'string') {
+          printLine(`cd: ${target}: Not a directory`, 'error');
+        } else {
+          currentPath = parts;   // move into the folder
+          updatePrompt();
+        }
+      }
+    },
   };
 
   // Splits the input into a command name and its arguments, then runs it
@@ -549,6 +688,9 @@ document.addEventListener('DOMContentLoaded', () => {
       printLine(`command not found: ${name}. Type "help" to see all commands.`, 'error');
     }
   }
+
+  // Show the welcome message as soon as the page loads
+  showWelcome();
 
   terminalForm.addEventListener('submit', (e) => {
     e.preventDefault();   // stop the page from reloading
