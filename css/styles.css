@@ -1123,6 +1123,22 @@ img {
     flex-direction: column;
     gap: 4px;
   }
+
+  /* Terminal: smaller text and spacing so the input has more room */
+  .terminal-output {
+    padding: 12px;
+    max-height: 280px;
+    font-size: 0.8rem;
+  }
+
+  .terminal-input-line {
+    padding: 10px 12px;
+  }
+
+  .terminal-prompt {
+    font-size: 0.8rem;   /* the input stays 1rem, so iPhone Safari does not zoom */
+  }
+
 }
 
 /*Reduced Motion*/

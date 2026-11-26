@@ -920,6 +920,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Clicking anywhere in the terminal window puts the cursor in the input,
+  // unless the user is selecting text to copy
+  const terminalWindow = document.querySelector('.terminal-window');
+
+  terminalWindow.addEventListener('click', () => {
+    if (window.getSelection().toString() === '') {
+      terminalInput.focus();
+    }
+  });
+
   /* Footer Year */
   document.getElementById('year').textContent = new Date().getFullYear();
 
