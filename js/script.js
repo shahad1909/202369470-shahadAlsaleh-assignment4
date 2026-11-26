@@ -504,6 +504,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const terminalInput = document.getElementById('terminal-input');
   const terminalOutput = document.getElementById('terminal-output');
   const terminalPrompt = document.getElementById('terminal-prompt');
+  // Every command the user typed, oldest first (used by "history" and the arrow keys)
+  const commandHistory = [];
+  let historyIndex = 0;   // which old command the arrow keys are showing
 
   // Adds one line to the terminal output.
   // type: '' (normal), 'command' (what the user typed), or 'error'
@@ -567,6 +570,14 @@ document.addEventListener('DOMContentLoaded', () => {
         'Compared KNN, SVM, and MLP. A linear SVM reached 95.3% accuracy.'
       ].join('\n')
     }
+  };
+
+  // Links opened by the "open" command (names match the project files without ".txt")
+  const links = {
+    'file-system-simulator': 'https://github.com/shahad1233/File-System-Simulator',
+    'smart-pedestrian-crossing': 'https://github.com/shahad1233/smart-pedestrian-crossing-system',
+    'mobile-price-classification': 'https://github.com/shahad1233/Mobile-Price-Classification-using-ML',
+    github: 'https://github.com/shahad1909'
   };
 
   // Where the user is now, as a list of folder names ([] = home "~")
@@ -769,8 +780,49 @@ document.addEventListener('DOMContentLoaded', () => {
           printLine(`grep: no results for "${word}"`, 'error');
         }
       }
-    }
+    },
 
+    theme: {
+      description: 'Change the site theme (theme dark, theme light, or theme to switch)',
+      run(args) {
+        const isDark = root.getAttribute('data-theme') === 'dark';
+        // No choice given: switch to the other theme, like the button
+        const choice = args[0] ? args[0].toLowerCase() : (isDark ? 'light' : 'dark');
+
+        if (choice !== 'dark' && choice !== 'light') {
+          printLine(`theme: unknown theme "${args[0]}". Use: theme dark or theme light`, 'error');
+          return;
+        }
+
+        applyTheme(choice);               // the same function the theme button uses
+        saveSetting('theme', choice);      // remember it for the next visit
+        printLine(`Theme changed to ${choice}.`);
+      }
+    },
+
+    open: {
+      description: 'Open a project on GitHub (e.g. open file-system-simulator)',
+      run(args) {
+        const name = (args[0] || '').toLowerCase().replace('.txt', '');
+
+        if (!Object.hasOwn(links, name)) {
+          printLine(`open: choose one of: ${Object.keys(links).join(', ')}`, 'error');
+          return;
+        }
+
+        window.open(links[name], '_blank', 'noopener');
+        printLine(`Opening ${name} in a new tab...`);
+      }
+    },
+
+    history: {
+      description: 'Show the commands you typed',
+      run() {
+        commandHistory.forEach((cmd, index) => {
+          printLine(`${String(index + 1).padStart(3)}  ${cmd}`);
+        });
+      }
+    }
 
   };
 
@@ -800,9 +852,32 @@ document.addEventListener('DOMContentLoaded', () => {
       return;   // nothing typed: do nothing
     }
 
+    commandHistory.push(command);   // remember it
+    historyIndex = commandHistory.length;   // point after the newest command
+
     // Show the typed command with the current prompt, like a real terminal
     printLine(`${terminalPrompt.textContent} ${command}`, 'command');
     runCommand(command);
+  });
+
+  // Arrow keys: ↑ shows older commands, ↓ shows newer ones
+  terminalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();   // keep the cursor at the end of the text
+      if (historyIndex > 0) {
+        historyIndex--;
+        terminalInput.value = commandHistory[historyIndex];
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex < commandHistory.length - 1) {
+        historyIndex++;
+        terminalInput.value = commandHistory[historyIndex];
+      } else {
+        historyIndex = commandHistory.length;   // past the newest: empty field
+        terminalInput.value = '';
+      }
+    }
   });
 
   /* Footer Year */
