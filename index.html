@@ -37,6 +37,7 @@
           <li><a href="#about">About</a></li>
           <li><a href="#achievements">Achievements</a></li>
           <li><a href="#projects">Projects</a></li>
+          <li><a href="#terminal">Terminal</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
@@ -315,6 +316,46 @@
         </article>
 
       </div>
+    </div>
+  </section>
+  <!-- Terminal Section: explore the portfolio with shell commands -->
+  <section id="terminal" class="section terminal">
+    <div class="section-container">
+      <h2 class="section-title">Terminal</h2>
+      <p class="terminal-intro">
+        Prefer the command line? Explore my portfolio the way my
+        File System Simulator works. Type <code>help</code> to start.
+      </p>
+
+      <div class="terminal-window">
+        <!-- Title bar (decoration only, hidden from screen readers) -->
+        <div class="terminal-bar" aria-hidden="true">
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-title">shahad@portfolio: ~</span>
+        </div>
+
+        <!-- Command results are added here by JavaScript -->
+        <div class="terminal-output" id="terminal-output" aria-live="polite"></div>
+
+        
+        <!-- Input line: pressing Enter submits the form -->
+        <form class="terminal-input-line" id="terminal-form">
+          <span class="terminal-prompt" id="terminal-prompt" aria-hidden="true">shahad@portfolio:~$</span>
+          <input
+            type="text"
+            id="terminal-input"
+            class="terminal-input"
+            aria-label="Terminal command"
+            autocomplete="off"
+            spellcheck="false"
+            autocapitalize="off"
+          />
+        </form>
+
+      </div>
+
     </div>
   </section>
     <!-- Contact Section -->
