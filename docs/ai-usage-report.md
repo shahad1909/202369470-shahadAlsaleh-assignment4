@@ -159,6 +159,45 @@ and changes:
   it in my phone screenshot. We corrected the README so it only lists the
   bug I found myself.
 
+### Presentation (slides, script, and video)
+
+Claude drafted the slides and the video script in a separate
+conversation (C02). I reviewed them, asked for changes, and edited them
+myself:
+
+- **Script:** I removed the list of Assignment 1–3 features from the
+  overview, and a sentence I didn't need in the "What's new" part. The
+  first draft of the live demo jumped between sections, so I asked for
+  it to follow the site from top to bottom, one section at a time. I
+  asked Claude to check whether there was time to name the two bugs that
+  were fixed, and added them briefly. I asked how to pronounce the
+  terminal commands; Claude suggested giving each command's meaning the
+  first time it appears, so viewers who don't know the terminal can
+  follow, and I agreed. I asked for the whole script in English in one
+  block, because mixed Arabic and English text was hard to read, and for
+  an organized copy outside the slides to practise with during the live
+  demo.
+- **Slides:** I sent Claude my own screenshot of the live site to
+  replace the home page screenshot, because the first one did not show
+  my real font. Slides 4, 7, and 10 used a dark theme, and I asked for
+  them to match the light theme of the other slides. I decided not to
+  add more pictures to the Outcomes slide, to keep it clear. I asked for
+  my screenshots of the two fixed bugs (the message box
+  and the terminal in dark mode) to be added to
+  the AI Integration slide; Claude took them from our earlier
+  conversation and added them to my edited copy of the slides. I also
+  edited the slides myself in PowerPoint: I changed the course name on
+  the cover to my section (F12), and adjusted the sizes and spacing
+  where there were clear gaps between the text, so the slides look
+  consistent.
+- **Checked the rules first:** I checked that the requirements allow
+  AI for the presentation as long as it is declared.
+- **Video:** I recorded the video and the voice myself. No AI was used
+  for the voice-over or video editing. I practised with the script to
+  keep the video under 7 minutes.
+
+---
+
 ## 5. AI Usage Log
 
 | ID | Tool (model) | Date | Purpose | Files affected | What you changed and how you verified it |
