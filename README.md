@@ -1,50 +1,122 @@
-# Shahad Sultan Alsaleh — Personal Portfolio (Assignment 3)
+# Shahad Sultan Alsaleh — Personal Portfolio (Assignment 4)
 
-🔗 **Live site:** https://shahad1909.github.io/202369470-shahadAlsaleh-assignment3/
+🔗 **Live site:** https://shahad1909.github.io/202369470-shahadAlsaleh-assignment4/
 
 ## Project Description
 
-This is my personal portfolio website, built as Assignment 3 of the web
-development course. It continues the interactive portfolio from
-Assignment 2 and adds **advanced functionality**: visitors can filter and
-sort my projects at the same time, the site remembers their choices
-between visits, each project shows its real language breakdown from the
-GitHub API, and a live timer shows how long they have been on the page.
-I also optimized the site with Lighthouse, reaching **100** in all four
-categories on both mobile and desktop.
+This is my personal portfolio website and the final step of the
+web development course assignments. It brings together everything from
+Assignments 1–3 (responsive layout, dark/light theme, live GitHub data,
+project filter and sort, and a validated contact form) and adds one new
+creative feature: an **interactive terminal**.
+
+The terminal is a web version of my Java
+[File System Simulator](https://github.com/shahad1233/File-System-Simulator)
+project. Instead of a real disk, its files are my portfolio: visitors can
+type `ls`, `cd`, `cat`, `tree`, and `grep` to explore my background,
+skills, and projects, just like in a Linux shell.
+
+I chose this idea because it connects my portfolio to one of my own projects, the File System Simulator I built in Java. I wanted visitors to actually try the same commands (ls, cd, cat, tree, grep) in the browser instead of just reading about the project, and it was a good chance to rebuild the same idea in JavaScript.
 
 The site is built with plain **HTML, CSS, and JavaScript**, with no
-frameworks, libraries, or backend.
+frameworks, libraries, or backend, and scores **100** in all four
+Lighthouse categories on both mobile and desktop.
 
 ### Sections
 - **About Me**: a short introduction, background, skills, and hobbies.
 - **Achievements**: academic honors and test scores.
-- **Projects**: three featured projects that can be filtered by category
-  and sorted, each with live GitHub info, a language breakdown,
-  expandable details, and a GitHub link.
-- **Contact**: a form (Name, Email, Message) with client-side validation.
+- **Projects**: three featured projects with filter, sort, live GitHub
+  info, and a language breakdown.
+- **Terminal** *(new)*: explore the portfolio with shell commands.
+- **Contact**: a form with client-side validation.
 
 ---
 
-## What's New in Assignment 3
+## What's New in Assignment 4
 
-| Feature | What it does | How to try it |
+| Feature | What it does |
+|---|---|
+| **Interactive terminal** | 11 commands (`help`, `ls`, `cd`, `pwd`, `cat`, `tree`, `grep`, `theme`, `open`, `history`, `clear`) over a small file system built from my portfolio content. |
+| **Shell-like experience** | The prompt shows the current folder, ↑/↓ recall earlier commands, and Tab completes commands, file names, and link names. |
+| **Connected to the site** | `theme dark` changes the theme of the whole page (and is remembered), and `open` opens my projects on GitHub. |
+| **Helpful errors** | Wrong commands or paths show a clear message (e.g. `cd: about.txt: Not a directory`) instead of breaking. |
+| **Accessible** | Results are announced to screen readers, the input has a label, and Tab only completes when there is text, so keyboard users can still leave the terminal. |
+| **Polish & fixes** | A border makes the terminal visible in dark mode, the message box only resizes vertically, and form fields no longer cause zoom on iPhone. |
+
+
+---
+
+## User Guide
+
+### Using the terminal
+
+Scroll to the **Terminal** section (or click **Terminal** in the menu),
+click inside the dark window, and start typing. Press **Enter** to run a
+command.
+
+**New to terminals? Try these three commands in order:**
+
+1. `ls` — see the files you can read
+2. `cat about.txt` — read a file
+3. `tree` — see everything at once
+
+### All commands
+
+| Command | What it does | Example |
 |---|---|---|
-| **Filter + sort projects together** | Filter buttons (All, Software, Hardware, Machine Learning) and a sort menu (Newest, Oldest, Name A–Z) work at the same time. Projects without a GitHub date are always placed last, project numbers (01, 02, 03) follow the current order, and a message appears if no project matches. | Click **Hardware**, then change **Sort by**: only the hardware project stays, in the chosen order. |
-| **Remembered choices** | The selected filter and sort are saved in `localStorage` and restored on the next visit, but only if they are still valid options. The theme uses the same shared save/read functions. | Choose **Software** and **Oldest first**, then refresh the page. |
-| **Language breakdown (GitHub API)** | Each project shows the percentage of each programming language in its repository (top 3, with the rest grouped as "Other"), calculated from a second GitHub API request. If this request fails, the line is simply hidden. | Look under the dates of each project, e.g. `Java 100.0%`. |
-| **Visit timer** | The footer shows how long you have been on the page (e.g. `2m 05s`). It is calculated from the start time, so it stays correct even when the tab is in the background. | Scroll to the footer and wait a few seconds. |
-| **Performance & accessibility** | Only the font weights in use are loaded, servers are preconnected, a forced layout calculation was removed, light-mode colors were darkened to meet WCAG AA contrast, and the content is wrapped in a `<main>` landmark. | See the Lighthouse results below. |
+| `help` | Lists every command with a short description | `help` |
+| `ls` | Lists the files and folders (folders end with `/`) | `ls`, `ls projects` |
+| `cd` | Moves into a folder (`..` goes back, `cd` alone goes home) | `cd projects`, `cd ..` |
+| `pwd` | Shows the folder you are in | `pwd` |
+| `cat` | Shows the content of a file | `cat skills.txt` |
+| `tree` | Shows all files and folders as a tree | `tree` |
+| `grep` | Searches every file for a word (not case-sensitive) | `grep java` |
+| `theme` | Changes the site theme (alone, it switches) | `theme dark`, `theme` |
+| `open` | Opens a project or my GitHub profile in a new tab | `open github` |
+| `history` | Lists the commands you typed | `history` |
+| `clear` | Clears the screen | `clear` |
 
-### Features carried over from Assignments 1 and 2
-- Fully responsive layout (desktop, tablet, mobile) using CSS Flexbox and Grid.
-- Dark / light theme saved in `localStorage`.
-- Live GitHub repository dates, with a loading state and a friendly
-  error message with a **Try again** button.
-- Expandable project details ("Biggest challenge" / "What I learned").
-- Contact form with live validation, a character counter, and a shake
-  animation for invalid fields.
-- Smooth scrolling, time-of-day greeting, and a mobile hamburger menu.
+### Tips
+
+- **Tab** completes what you are typing: `he` → `help`,
+  `cat ab` → `cat about.txt`. If there are several matches, they are all
+  listed.
+- **↑ / ↓** bring back the commands you typed before.
+- You can reach a file in another folder without `cd`:
+  `cat projects/file-system-simulator.txt`.
+- The prompt always shows where you are, e.g.
+  `shahad@portfolio:~/projects$`.
+- If you type something wrong, the terminal tells you what happened,
+  e.g. `cd abc` → `cd: abc: No such file or directory`.
+- Keyboard users: when the input is empty, **Tab** moves on to the
+  contact form as usual.
+- **On a phone:** tap the dark window to open the keyboard. Phone
+  keyboards have no Tab or arrow keys, so type the full command.
+
+### Using the rest of the site
+
+- **Theme:** the 🌙 / ☀️ button in the top bar (or `theme` in the
+  terminal). Your choice is remembered.
+- **Projects:** use the filter buttons and the **Sort by** menu; your
+  choices are remembered. Click **Show more** for each project's
+  challenge and lessons.
+- **Contact:** fill in all three fields; each field tells you what is
+  missing before you send.
+
+### Features carried over from Assignments 1–3
+### Features carried over from Assignments 1–3
+- The layout is fully responsive and works on desktop, tablet, and mobile (using Flexbox and Grid).
+- A dark / light theme that is saved in `localStorage`.
+- The projects can be filtered (All, Software, Hardware, Machine Learning) and sorted
+  (Newest, Oldest, Name A–Z) at the same time, and the site remembers these choices
+  on the next visit.
+- Each project shows its GitHub dates and language breakdown, with a loading
+  message, and a friendly error message with a **Try again** button if something goes wrong.
+- Each project can be expanded to show "Biggest challenge" and "What I learned".
+- The contact form checks the fields while typing, has a character counter,
+  and shakes the fields that are not valid.
+- A visit timer, a greeting based on the time of day, smooth scrolling, and a
+  hamburger menu on mobile.
 
 ### Accessibility
 - All interactive elements are real `<button>` elements, so they work
@@ -59,25 +131,66 @@ frameworks, libraries, or backend.
   readers can jump straight to it.
 - All animations are turned off for users who enable "reduce motion" in
   their device settings.
+- **Terminal:** new results are read out by screen readers
+  (`aria-live="polite"`), the input has an `aria-label`, and the
+  decorative title bar and prompt are hidden from screen readers
+  (`aria-hidden`).
+- **No keyboard trap:** Tab only autocompletes when the terminal input
+  has text, so keyboard users can always move on to the next element.
+- The terminal input uses a 16px font, so iPhone Safari does not zoom in
+  when it is focused (the contact form fields were fixed the same way).
 
 ---
 
 ## Lighthouse Results
 
-Tested with [PageSpeed Insights](https://pagespeed.web.dev) on the live site.
+I tested the live site with [PageSpeed Insights](https://pagespeed.web.dev)
+after adding the terminal, and all the scores stayed the same.
 
 | | Performance | Accessibility | Best Practices | SEO |
 |---|---|---|---|---|
-| Mobile, before optimizing | 100 | 95 | 100 | 100 |
-| **Mobile, after** | **100** | **100** | **100** | **100** |
-| **Desktop, after** | **100** | **100** | **100** | **100** |
+| **Mobile** | **100** | **100** | **100** | **100** |
+| **Desktop** | **100** | **100** | **100** | **100** |
 
-| Mobile before | Mobile after | Desktop after |
-|---|---|---|
-| ![Mobile before](docs/images/lighthouse-mobile-before.png) | ![Mobile after](docs/images/lighthouse-mobile-after.png) | ![Desktop after](docs/images/lighthouse-desktop-after.png) |
+| Mobile | Desktop |
+|---|---|
+| ![Lighthouse mobile](docs/images/lighthouse-mobile-a4.png) | ![Lighthouse desktop](docs/images/lighthouse-desktop-a4.png) |
 
-The Performance score can change slightly between runs (I saw 98–100),
-because it depends on network speed at the time of the test.
+The Performance score can be a little different each time I run the test,
+because it depends on the network speed at that moment.
+
+---
+
+## Testing & Compatibility
+
+### Browsers and devices
+
+I tested the live site on the three main browser engines:
+
+| Browser | Engine | Device | Result |
+|---|---|---|---|
+| Google Chrome | Chromium | Windows laptop | ✅ Works |
+| Microsoft Edge | Chromium | Windows laptop | ✅ Works |
+| Mozilla Firefox | Gecko | Windows laptop | ✅ Works |
+| Safari | WebKit | iPhone | ✅ Works |
+
+<img src="docs/images/terminal-mobile.jpg" alt="The terminal on an iPhone in dark mode, showing cd, ls, tree, and theme commands" width="300">
+
+### Terminal test cases
+
+I wrote **44 test cases** to check every command, wrong inputs, paths,
+the theme, the keyboard shortcuts (↑/↓, Tab), and the console. All of them
+passed on the live site. You can find the full list in
+[`docs/technical-documentation.md`](docs/technical-documentation.md#testing).
+
+### Issues I found while testing (and fixed)
+
+| Issue | Fix |
+|---|---|
+| In dark mode, the terminal window was hard to see because it blended with the page background. | I added a 1px border around the window. |
+| The contact message box could be dragged wider than the form. | I used `resize: vertical` and `max-width: 100%`. |
+| iPhone Safari zoomed in when I tapped a form field, because the font was smaller than 16px. | I changed the input font size to `1rem` (16px). |
+| A phone screenshot I used in the docs was too big (≈270 KB). | I resized it to 600px wide and compressed it to ≈51 KB. |
 
 ---
 
