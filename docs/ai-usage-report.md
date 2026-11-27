@@ -128,6 +128,36 @@ changes:
 
 ---
 
+### Presentation (slides, script, and video)
+
+Claude drafted the slides and the video script. I reviewed them,
+asked for changes, and edited them myself:
+
+- **Script:** I removed the list of Assignment 1–3 features from the
+  overview, and a sentence I didn't need in the "What's new" part. The
+  first draft of the live demo jumped between sections, so I asked for
+  it to follow the site from top to bottom, one section at a time. I
+  asked Claude to check whether there was time to name the two bugs I
+  found, and added them briefly. I asked how to pronounce the terminal
+  commands, and had each command's meaning added the first time it
+  appears, so viewers who don't know the terminal can follow. I asked
+  for the whole script in English in one block, because mixed Arabic
+  and English text was hard to read, and for an organized copy outside
+  the slides to practise with during the live demo.
+- **Slides:** I replaced the home page screenshot with my own
+  screenshot of the live site, because the first one did not show my
+  real font. Slides 4, 7, and 10 used a dark theme, and I asked for them
+  to match the light theme of the other slides. I decided not to add
+  more pictures to the Outcomes slide, to keep it clear. I asked for my
+  two bug screenshots (the message box and the terminal in dark mode)
+  to be added to the AI Integration slide. I also edited the slides
+  myself: [your edits, e.g. the course code on the cover].
+- **Checked the rules first:** I checked that the requirements allow
+  AI for the presentation as long as it is declared.
+- **Video:** I recorded the video and the voice myself. No AI was used
+  for the voice-over or video editing. I practised with the script to
+  keep the video under 7 minutes ([final length]).
+
 ## 5. AI Usage Log
 
 | ID | Tool (model) | Date | Purpose | Files affected | What you changed and how you verified it |
@@ -144,6 +174,9 @@ changes:
 | A09 | Claude (Claude Opus 5.5) | 2026-11-21 | Draft of `README.md` (two versions). | `README.md` | Noticed the missing Accessibility section; wrote my own sentence in the AI summary; corrected a statement for accuracy. |
 | A10 | Claude (Claude Opus 5.5) | 2026-11-21 | Draft of `docs/technical-documentation.md`. | `docs/technical-documentation.md` | Wrote the compatibility testing section myself and checked the technical details against my code. |
 | A11 | Claude (Claude Opus 5.5) | 2026-11-21 | Draft of this report. | `docs/ai-usage-report.md` | Wrote the benefits and challenges in my own words, reviewed the learning outcomes list, and checked every statement. |
+| C[__] | Claude (Claude Opus 5.5) | 2026-11-27 | Presentation session: slide plan, video script, slides draft, adding the bug screenshots, and help with the final commits. | `presentation/slides.pdf`, `docs/ai-usage-report.md` | Edited the script and slides as described in section 4; recorded the video and voice myself. |
+| A[__] | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of the video script. | — (used for recording) | Removed the A1–A3 feature list, reordered the demo section by section, added the two bugs and the command meanings. Timed it under 7 minutes. |
+| A[__] | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of the slides, then adding the two bug screenshots to slide 6. | `presentation/slides.pdf` | Replaced the home page screenshot, made the theme consistent, kept the Outcomes slide simple, and made my own edits. Checked every slide before exporting. |
 
 The full, unedited conversation (C01) is included in the AI Evidence ZIP
 submitted on Blackboard. The original AI outputs before my edits (A01–A11), including the code templates with blanks and the documentation drafts, are in the `artifacts/` folder of the ZIP.
