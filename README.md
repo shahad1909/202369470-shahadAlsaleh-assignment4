@@ -181,7 +181,7 @@ I tested the live site on the three main browser engines:
 I wrote **44 test cases** to check every command, wrong inputs, paths,
 the theme, the keyboard shortcuts (↑/↓, Tab), and the console. All of them
 passed on the live site. You can find the full list in
-[`docs/technical-documentation.md`](docs/technical-documentation.md#testing).
+[`docs/technical-documentation.md`](docs/technical-documentation.md#15-testing).
 
 ### Issues I found while testing (and fixed)
 

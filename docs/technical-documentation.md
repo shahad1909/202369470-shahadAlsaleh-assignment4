@@ -1,19 +1,24 @@
 # Technical Documentation
 
 ## Overview
-This document explains the technical structure, design decisions, and
-implementation details of my portfolio website. Assignment 3 builds on
-Assignments 1 and 2 and focuses on **advanced functionality**:
+This document covers the technical structure of my portfolio website,
+the design decisions behind it, and how it was implemented. Assignment 4
+is the final version. It keeps everything from Assignments 1–3 and adds
+one creative feature, an **interactive terminal**, along with some final
+polish:
 
-1. Project filtering and sorting that work together (complex logic)
-2. Remembering the visitor's filter and sort choices (state management)
-3. A language breakdown for each project from a second GitHub API
-   endpoint (API integration)
-4. A visit timer (complex logic)
-5. Performance and accessibility improvements measured with Lighthouse
+1. A terminal section that supports 11 shell-style commands. They run on
+   a small in-memory file system built from my portfolio content
+   (section 8).
+2. Shell features: the prompt shows the current folder, ↑/↓ moves
+   through command history, and Tab autocompletes (section 8).
+3. Fixes for problems I found during testing: dark-mode visibility, form
+   resizing, and zoom on iPhone (section 13).
+4. Testing on four browsers, plus 44 test cases for the terminal
+   (section 15).
 
-Sections 1–6 describe the foundation from Assignments 1 and 2 (updated
-where Assignment 3 changed it). Section 7 describes the new features.
+Sections 1–7 cover the foundation built in Assignments 1–3, updated
+wherever Assignment 4 changed something. Section 8 covers the terminal.
 
 ---
 
@@ -39,14 +44,15 @@ No build tools, package managers, or external JS libraries are required.
 
 | File/Folder | Purpose |
 |---|---|
-| `index.html` | Main page: Navbar, then a `<main>` with the Hero, About, Achievements, Projects (with filter and sort controls), and Contact sections, then the Footer (with the visit timer). A small inline script in `<head>` applies the saved theme before the page is drawn. |
+| `index.html` | Main page: Navbar, then a `<main>` with the Hero, About, Achievements, Projects (with filter and sort controls), Terminal, and Contact sections, then the Footer (with the visit timer). A small inline script in `<head>` applies the saved theme before the page is drawn. |
 | `css/styles.css` | All styling, organized by section. Theme colors are CSS variables at the top, with a dark palette under `:root[data-theme="dark"]`. |
 | `js/script.js` | All interactivity, inside one `DOMContentLoaded` listener and split into commented sections (one per feature). |
 | `assets/images/` | Reserved for future images (kept in Git with an empty `.gitkeep` file). |
-| `docs/images/` | Lighthouse screenshots used in the README. |
+| `docs/images/` | Lighthouse screenshots (Assignments 3 and 4) and a compressed mobile screenshot of the terminal, used in the README. |
 | `docs/ai-usage-report.md` | Documents all AI tool usage, with the usage log and declaration. |
 | `docs/technical-documentation.md` | This file. |
 | `.gitignore` | Excludes OS files, editor settings, and AI evidence files from the repository. |
+| `presentation/` | The presentation slides (`slides.pdf`) and the demo video (`demo-video.mp4`). |
 
 ---
 
@@ -538,7 +544,184 @@ The footer shows "You've been here for 45s", then "2m 05s".
 
 ---
 
-## 8. Accessibility
+## 8. New in Assignment 4: Interactive Terminal
+
+The terminal is a web version of my Java File System Simulator. It lives
+in its own section between Projects and Contact, and all of its code is
+inside the same `DOMContentLoaded` listener in `script.js`, so it can
+reuse `applyTheme()` and `saveSetting()` from the theme feature.
+
+### 8.1 HTML Structure
+
+```
+section#terminal
+└── div.terminal-window
+    ├── div.terminal-bar        (three dots + title, aria-hidden)
+    ├── div#terminal-output     (results, aria-live="polite")
+    └── form#terminal-form
+        ├── span#terminal-prompt  (aria-hidden)
+        └── input#terminal-input  (aria-label="Terminal command")
+```
+
+The input is inside a `<form>`, so pressing **Enter** (or **Go** on a
+phone keyboard) fires one `submit` event. The handler calls `e.preventDefault()`
+so the page does not reload.
+The input turns off `autocomplete`, `spellcheck`, and `autocapitalize`, so commands are not
+underlined or capitalized on phones.
+
+### 8.2 The File System (data)
+
+The portfolio is stored as nested objects, the same idea as the tree in
+my Java project: **a folder is an object** (name → content) and **a file
+is a string** (its text). `typeof` tells them apart.
+
+```js
+const fileSystem = {
+  'about.txt': '...',
+  'skills.txt': '...',
+  'achievements.txt': '...',
+  'contact.txt': '...',
+  projects: {
+    'file-system-simulator.txt': '...',
+    'smart-pedestrian-crossing.txt': '...',
+    'mobile-price-classification.txt': '...'
+  }
+};
+```
+
+Each file is written as an array of lines joined with `'\n'`, and the
+output uses `white-space: pre-wrap`, so line breaks and the spacing in
+`tree` are kept.
+
+### 8.3 Command Registry
+
+All commands live in one `commands` object. Each command has a
+`description` and a `run(args)` function:
+
+```js
+const commands = {
+  help: { description: 'Show all available commands', run() { ... } },
+  ls:   { description: 'List files and folders ...', run(args) { ... } },
+  // ...
+};
+```
+
+This avoids a long `if / else if` chain. `help` builds its list from the same object with `Object.entries`, 
+so any new command shows up in `help` automatically.
+ Descriptions are aligned in one column with `padEnd(10)`,
+which works because the font is monospace.
+
+### 8.4 From Input to Output
+
+```
+Enter pressed
+   → submit event, preventDefault()
+   → trim the input (empty → do nothing)
+   → save it in commandHistory
+   → print the prompt + command (green line)
+   → runCommand(input)
+        → split(/\s+/) into [name, ...args]
+        → name.toLowerCase()
+        → Object.hasOwn(commands, name)?
+             yes → commands[name].run(args)
+             no  → "command not found: ..." (error line)
+```
+
+Every line is added by one helper, `printLine(text, type)`. 
+It creates a `<p>`, sets its `textContent`, adds a class (`command` or `error`) for the color, 
+and then scrolls the output to the bottom
+(`scrollTop = scrollHeight`). A welcome message is printed when the page
+loads and again after `clear`, so the screen is never empty.
+
+### 8.5 Paths and the Current Folder
+
+The current folder is an array of folder names: `[]` is home (`~`) and
+`['projects']` is `~/projects`, similar to the stack used for `pwd` in my
+Java project. Three helpers are shared by all commands:
+
+| Function | Job | Example |
+|---|---|---|
+| `resolvePath(text)` | Turns typed text into a full path array. `..` removes the last folder (`pop`), a name adds it (`push`), `~` or `/` at the start begins from home. It works on a copy (`[...currentPath]`), so a wrong path never changes the current folder. | in `~/projects`, `".."` → `[]` |
+| `getNode(parts)` | Walks the file system along the path and returns the folder, the file, or `null` if it does not exist. | `['projects']` → the projects object |
+| `formatPath(parts)` | Turns a path array into text for `pwd` and the prompt. | `['projects']` → `"~/projects"` |
+
+`cd` updates `currentPath` and then calls `updatePrompt()`, so the prompt
+always shows the current folder.
+
+### 8.6 Recursion: `tree` and `grep`
+
+Folders can contain folders, so both commands use a function that calls
+itself for every sub-folder:
+
+- `printTree(folder, indent)` prints each item with `├──`, or `└──` for
+  the last one (`index === names.length - 1`), and adds `│   ` or spaces
+  to the indent before going one level deeper.
+- `grepFolder(folder, prefix, word)` splits each file into lines and
+  prints every line that `includes` the word (both lowercased, so the
+  search is not case-sensitive). It returns how many lines matched, so
+  the command can say "no results" instead of printing nothing.
+
+`grep` joins all arguments into one search phrase (`grep machine learning`) and removes quotes, 
+so `grep "java"` also works, the same way it does in my Java project.
+
+### 8.7 Connected to the Rest of the Site
+
+- `theme dark | light` calls the same `applyTheme()` and
+  `saveSetting()` as the theme button, so the whole page changes and the
+  choice is remembered. Typing `theme` on its own toggles between the two, just like the button.
+- `open <name>` looks up a `links` object and calls
+  `window.open(url, '_blank', 'noopener')`. The link names are the project file names without `.txt`, but typing the name with `.txt` works too.
+
+### 8.8 Command History (↑ / ↓)
+
+Every command is pushed into `commandHistory`, and `historyIndex` points
+just after the newest one. A `keydown` listener moves the index: ↑ shows
+older commands, ↓ newer ones, and going past the newest empties the
+input. `e.preventDefault()` keeps the cursor at the end of the text.
+`history` prints the list numbered with `padStart`.
+
+### 8.9 Tab Autocomplete
+
+Tab completes the **last word**, using different options depending on
+where it is:
+
+| Position | Options |
+|---|---|
+| First word | Command names (`Object.keys(commands)`) |
+| After `open` | Link names (`Object.keys(links)`) |
+| Anything else | Files and folders in the folder before the last `/` (folders get a trailing `/`) |
+
+If there is one match, the word is completed; if there are several, they are all printed. To avoid a
+**keyboard trap**, Tab is only captured when the input has text; when it
+is empty, Tab moves focus to the next element as usual. When it looks up the folder to complete from, the code checks `!folder` first, 
+because in JavaScript `typeof null` is also `"object"`, so a missing folder would otherwise look like a real one.
+
+### 8.10 Security and Robustness
+
+- **XSS protection:** all output uses `textContent`, never `innerHTML`,
+  so typing `<b>hi</b>` shows the text instead of running it as HTML.
+- **Built-in names:** commands, paths, and links are checked with
+  `Object.hasOwn`, so names inherited by every object (like `toString`)
+  are treated as unknown instead of crashing.
+- The terminal does not use the GitHub API, so it works even when the
+  API limit is reached or the visitor is offline.
+
+### 8.11 Styling Decisions
+
+- The window is **always dark**, like a real terminal; the three dots use
+  the site's rose, sand, and sage colors to keep the same identity. A 1px
+  border keeps the window visible in dark mode.
+- The font is a new `--font-mono` variable
+  (`ui-monospace, Menlo, Consolas, monospace`). Real font names come
+  first because `monospace` alone makes browsers shrink the text.
+- The browser's input outline is removed, and `:focus-within` colors the
+  input line instead, so keyboard users still see the focus.
+- The output has `max-height` with `overflow-y: auto` (280px on phones),
+  and the input stays at `1rem` (16px) so iPhone Safari does not zoom.
+
+---
+
+## 9. Accessibility
 - All interactive controls are real `<button>` elements (keyboard
   accessible by default).
 - `aria-expanded` + `aria-controls` on the project toggles.
@@ -558,10 +741,19 @@ The footer shows "You've been here for 45s", then "2m 05s".
   raised the Lighthouse Accessibility score from 95 to 100.
 - `@media (prefers-reduced-motion: reduce)` disables all transitions
   and animations.
+  - **Terminal (Assignment 4):** `aria-live="polite"` on the output, so
+  each new result is read out; `aria-label="Terminal command"` on the
+  input; `aria-hidden="true"` on the decorative title bar and the prompt
+  text, so screen readers do not read symbols like `~$` before every
+  command.
+- **No keyboard trap:** Tab only autocompletes when the terminal input
+  has text, so keyboard users can always move on (section 8.9).
+- `:focus-within` highlights the terminal input line in rose, replacing
+  the removed input outline (section 8.11).
 
 ---
 
-## 9. Error Handling Summary
+## 10. Error Handling Summary
 
 | Situation | How the site responds |
 |---|---|
@@ -572,10 +764,18 @@ The footer shows "You've been here for 45s", then "2m 05s".
 | Saved filter/sort value is no longer valid | Ignored; the default (All / Newest) is used. |
 | `localStorage` unavailable | Caught with `try/catch`; everything still works for the current visit. |
 | Invalid or empty form field | Inline error message, red border, shake, and focus moved to the first invalid field. |
+| Unknown terminal command (including built-in names like `toString`) | `command not found: <name>. Type "help" to see all commands.` in the error color. |
+| Path does not exist (`ls`, `cd`, `cat`) | `<command>: <path>: No such file or directory` |
+| `cd` into a file / `cat` a folder | `Not a directory` / `Is a directory`, like Linux. |
+| Missing argument (`cat`, `grep`) | A short usage hint, e.g. `Try: cat about.txt`. |
+| `grep` finds nothing | `grep: no results for "<word>"` |
+| Unknown theme or link name | The message lists the valid choices. |
+| Empty input | Nothing happens (no empty line is printed). |
+| HTML typed into the terminal | Shown as plain text (`textContent`), never run. |
 
 ---
 
-## 10. Performance
+## 11. Performance
 
 Tested with PageSpeed Insights (Lighthouse) on the live GitHub Pages site.
 
@@ -609,20 +809,49 @@ Other performance choices:
 The Performance score varies slightly between runs (98–100), depending on
 network conditions at the time of the test.
 
+
+### Assignment 4 results
+
+Re-tested on the live site after adding the terminal. Adding the new
+section did not lower any score:
+
+| | Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|---|
+| Mobile | 100 | 100 | 100 | 100 |
+| Desktop | 100 | 100 | 100 | 100 |
+
+Performance choices for Assignment 4:
+- The terminal adds no libraries, no extra files, and no network
+  requests: its content is stored in `script.js`, and it reuses the
+  existing theme functions.
+- Output lines are added one by one with `append`, instead of rebuilding
+  the whole output with `innerHTML`.
+- The mobile screenshot in the README was resized from 1290px to 600px
+  wide and compressed with Squoosh (MozJPEG), from about 270 KB to 51 KB.
+
 ---
 
-## 11. Browser Compatibility
-Tested on the live site in Chrome and Edge at desktop, tablet, and
-mobile sizes using DevTools device emulation, in both light and dark
-themes, and with keyboard-only navigation. All features use standard,
-widely supported APIs (CSS variables, Grid, Flexbox, `fetch`,
-`async/await`, `Promise.allSettled`, `localStorage`, `:focus-visible`).
+## 12. Browser Compatibility
 
-I also tested the live site on my iPhone using Safari. I checked the main features like the menu, the theme button, filtering and sorting the projects, the GitHub dates and language percentages, and the visit timer, and everything worked fine.
+The live site was tested on the three main browser engines, in light and
+dark themes, with the terminal test cases from section 15:
+
+| Browser | Engine | Device | Result |
+|---|---|---|---|
+| Google Chrome | Chromium | Windows laptop | ✅ All features work |
+| Microsoft Edge | Chromium | Windows laptop | ✅ All features work |
+| Mozilla Firefox | Gecko | Windows laptop | ✅ All features work |
+| Safari | WebKit | iPhone | ✅ All features work |
+
+I also used DevTools device emulation (iPhone SE) while building the
+mobile styles, and tested with keyboard-only navigation. All features use
+standard, widely supported APIs (CSS variables, Grid, Flexbox,
+`:focus-within`, `fetch`, `async/await`, `Promise.allSettled`,
+`localStorage`, `Object.hasOwn`).
 
 ---
 
-## 12. Debugging Notes
+## 13. Debugging Notes
 
 **Language percentages did not appear.** The code had no errors, so I
 checked the Network tab: the `/languages` requests returned status
@@ -649,9 +878,41 @@ testing.
 from step 4 was still in the file next to the new one, so
 `updateProjects()` ran twice per change. I removed the old one.
 
+
+### Assignment 4
+
+**Issues found while testing the terminal (and fixed):**
+
+| Issue | Fix |
+|---|---|
+| In dark mode, the terminal window blended into the page background. | Added a 1px border (`#3a3140`) around the window. |
+| The contact message box could be dragged wider than the form. | `resize: vertical` and `max-width: 100%` on the textarea. |
+| iPhone Safari zoomed in when a form field was focused, because its font was under 16px. | Set the form fields' font size to `1rem`. |
+
+**My changes did not appear on the live site.** After a push, the live
+site still showed the old CSS because the browser used its cached copy.
+A hard refresh (`Ctrl + Shift + R`) loaded the new file. While editing, I
+test on Live Server, which reloads on every save; the live site is only
+for final testing.
+
+**The border seemed missing.** I used DevTools (Inspect, then the
+Computed tab and the box model) and saw the border was `0`. I had been
+looking at the live site, which did not have the change yet. On Live
+Server the box model showed `1`, and the border was there.
+
+**Screenshot file name.** `git add` could not find
+`terminal-mobile.webp`. `ls` showed the real name was
+`terminal-mobile.webp.jpg`, because Windows hides file extensions, and
+the `file` command showed it was a JPEG. I renamed it with `mv` to
+`terminal-mobile.jpg`.
+
+**A pasted command lost its first letter.** Pasting three Git commands at
+once turned `git add` into `it add` (`command not found`), so nothing was
+committed. I now run Git commands one at a time and check each result.
+
 ---
 
-## 13. Known Limitations / Future Improvements
+## 14. Known Limitations / Future Improvements
 - **GitHub API rate limit:** unauthenticated requests are limited to 60
   per hour per IP address, and each page load uses 6 (2 per project).
   If the limit is reached, the friendly error message is shown.
@@ -663,3 +924,70 @@ from step 4 was still in the file next to the new one, so
   faster and avoid the rate limit.
 - **Future improvement:** store a real project date in the HTML (for
   example `data-date`) so sorting reflects when each project was done.
+- **Terminal content is static:** the files are written in `script.js`,
+  so updating my portfolio means editing them in two places (the page and
+  the terminal). A future improvement is to generate the files from the
+  page content.
+- **Read-only file system:** unlike my Java project, the terminal has no
+  `mkdir`, `touch`, or `rm`. A future version could allow them for the
+  current visit only.
+- **Tab with text keeps focus in the terminal:** to leave, keyboard users
+  clear the input first (or use Shift+Tab). This is mentioned in the
+  README user guide.
+- **Future improvement:** a `grep` built on the KMP algorithm from my Java
+  project, and colored output for folders in `ls`.
+
+
+---
+
+## 15. Testing
+
+All 44 test cases were run on the live GitHub Pages site (Edge), and the
+main ones again on Chrome, Firefox, and Safari on iPhone. All passed.
+
+| # | Input / action | Expected result |
+|---|---|---|
+| TC-01 | Open the page | Welcome message and a hint to type `help` |
+| TC-02 | Press Enter with an empty input | Nothing happens |
+| TC-03 | `help` | `Available commands:` and 11 commands, descriptions aligned |
+| TC-04 | `HELP` | Same as TC-03 (not case-sensitive) |
+| TC-05 | `hello` | `command not found: hello. Type "help" to see all commands.` |
+| TC-06 | `toString` | Same error, no crash |
+| TC-07 | `<b>hi</b>` | Same error, the tags shown as plain text |
+| TC-08 | `pwd` | `~` |
+| TC-09 | `ls` | The 4 files and `projects/` |
+| TC-10 | `ls about.txt` | `about.txt` |
+| TC-11 | `ls hello` | `ls: hello: No such file or directory` |
+| TC-12 | `cd projects` | Prompt becomes `shahad@portfolio:~/projects$` |
+| TC-13 | `pwd` | `~/projects` |
+| TC-14 | `cat ~/about.txt` | The about file, from inside `projects` |
+| TC-15 | `cd ..` | Prompt back to `~` |
+| TC-16 | `cd ../..` | Stays at `~`, no error |
+| TC-17 | `cd about.txt` | `cd: about.txt: Not a directory` |
+| TC-18 | `cd projects`, then `cd` | Back to `~` |
+| TC-19 | `cat projects` | `cat: projects: Is a directory` |
+| TC-20 | `cat` | `cat: missing file name. Try: cat about.txt` |
+| TC-21 | `cat projects/file-system-simulator.txt` | 3 lines about the project |
+| TC-22 | `tree` | The full tree, with `projects/` and its 3 files indented |
+| TC-23 | `grep java` | 3 lines (2 in `skills.txt`, because of "JavaScript", and 1 project) |
+| TC-24 | `grep "SVM"` | 1 line from the mobile price project |
+| TC-25 | `grep machine learning` | 1 line from `skills.txt` |
+| TC-26 | `grep pizza` | `grep: no results for "pizza"` |
+| TC-27 | `grep` | `grep: missing word. Try: grep java` |
+| TC-28 | `theme dark` | Whole site dark, button shows ☀️, `Theme changed to dark.` |
+| TC-29 | Refresh the page | Still dark |
+| TC-30 | `theme` | Switches to light |
+| TC-31 | `theme blue` | Error listing `dark` and `light` |
+| TC-32 | `open github` | GitHub profile in a new tab |
+| TC-33 | `open` | Error listing the 4 link names |
+| TC-34 | `open file-system-simulator.txt` | Opens the repository (`.txt` accepted) |
+| TC-35 | `clear` | Screen cleared, welcome message shown again |
+| TC-36 | `history` | All typed commands, numbered from 1 |
+| TC-37 | ↑ twice, then ↓ twice | Older commands appear, then the input is empty |
+| TC-38 | `he` + Tab | Completes to `help` |
+| TC-39 | `c` + Tab | Prints `clear   cd   cat` |
+| TC-40 | `cat projects/sm` + Tab | Completes to `cat projects/smart-pedestrian-crossing.txt` |
+| TC-41 | `open mo` + Tab | Completes to `open mobile-price-classification` |
+| TC-42 | Empty input + Tab | Focus moves to the contact form's Name field |
+| TC-43 | Click the title bar | The cursor goes to the input |
+| TC-44 | Open the Console | No errors |
