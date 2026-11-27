@@ -197,7 +197,7 @@ passed on the live site. You can find the full list in
 ## Setup Instructions
 
 ### Option 1: Open the live site
-Visit https://shahad1909.github.io/202369470-shahadAlsaleh-assignment3/.
+Visit https://shahad1909.github.io/202369470-shahadAlsaleh-assignment4/.
 Nothing to install.
 
 ### Option 2: Run locally
@@ -205,44 +205,81 @@ No installation or build tools are required. This is a static website.
 
 1. **Clone** this repository:
    ```bash
-   git clone https://github.com/shahad1909/202369470-shahadAlsaleh-assignment3.git
+   git clone https://github.com/shahad1909/202369470-shahadAlsaleh-assignment4.git
    ```
 2. **Navigate** into the project folder:
    ```bash
-   cd 202369470-shahadAlsaleh-assignment3
+   cd 202369470-shahadAlsaleh-assignment4
    ```
 3. **Open `index.html`** in your browser:
    - Double-click the file, **or**
    - Right-click it, choose "Open with", and pick your browser, **or**
    - Use the VS Code **Live Server** extension for auto-reload while editing.
+4. **Check that it works:** scroll to the **Terminal** section, type
+   `help`, and press Enter. You should see the list of commands.
 
 > **Notes:**
 > - An internet connection is needed for Google Fonts and the GitHub
->   data. Without it, the site still works and shows a friendly error
->   message with a **Try again** button.
+>   data. Without it, the site (including the terminal) still works and
+>   shows a friendly error message with a **Try again** button.
 > - GitHub allows **60 API requests per hour** per network without
 >   login, and each page load uses 6. If you refresh many times, the
 >   GitHub info may be unavailable for a while; it comes back on its own.
+>   The terminal does not use the GitHub API, so it is never affected.## Setup Instructions
+
+### Option 1: Open the live site
+Visit https://shahad1909.github.io/202369470-shahadAlsaleh-assignment4/.
+Nothing to install.
+
+### Option 2: Run locally
+No installation or build tools are required. This is a static website.
+
+1. **Clone** this repository:
+   ```bash
+   git clone https://github.com/shahad1909/202369470-shahadAlsaleh-assignment4.git
+   ```
+2. **Navigate** into the project folder:
+   ```bash
+   cd 202369470-shahadAlsaleh-assignment4
+   ```
+3. **Open `index.html`** in your browser:
+   - Double-click the file, **or**
+   - Right-click it, choose "Open with", and pick your browser, **or**
+   - Use the VS Code **Live Server** extension for auto-reload while editing.
+4. **Check that it works:** scroll to the **Terminal** section, type
+   `help`, and press Enter. You should see the list of commands.
+
+> **Notes:**
+> - An internet connection is needed for Google Fonts and the GitHub
+>   data. Without it, the site (including the terminal) still works and
+>   shows a friendly error message with a **Try again** button.
+> - GitHub allows **60 API requests per hour** per network without
+>   login, and each page load uses 6. If you refresh many times, the
+>   GitHub info may be unavailable for a while; it comes back on its own.
+>   The terminal does not use the GitHub API, so it is never affected.
 
 ---
 
 ## Project Structure
 
 ```
-202369470-shahadAlsaleh-assignment3/
+202369470-shahadAlsaleh-assignment4/
 ├── README.md
-├── index.html
+├── index.html            (all sections, including the terminal)
 ├── .gitignore
 ├── css/
-│   └── styles.css
+│   └── styles.css        (theme variables, layout, terminal styles)
 ├── js/
-│   └── script.js
+│   └── script.js         (all interactivity, including the terminal)
 ├── assets/
 │   └── images/
-└── docs/
-    ├── ai-usage-report.md
-    ├── technical-documentation.md
-    └── images/          (Lighthouse screenshots)
+├── docs/
+│   ├── ai-usage-report.md
+│   ├── technical-documentation.md
+│   └── images/           (Lighthouse results and screenshots)
+└── presentation/
+    ├── slides.pdf
+    └── demo-video.mp4
 ```
 
 ---
@@ -252,9 +289,13 @@ No installation or build tools are required. This is a static website.
   and ARIA attributes for accessibility.
 - **CSS3**: custom properties (variables) for theming, Flexbox, Grid,
   transitions, and `@keyframes` animations.
-- **JavaScript (ES6+)**: DOM events, `localStorage`, `fetch` with
-  `async/await`, `Promise.allSettled`, array methods (`map`, `sort`,
-  `filter`, `reduce`, `slice`, `includes`), and `setInterval`.
+- **JavaScript (ES6+)**: DOM events (`submit`, `keydown`, `click`),
+  `localStorage`, `fetch` with `async/await`, `Promise.allSettled`,
+  array methods (`map`, `sort`, `filter`, `reduce`, `slice`, `includes`),
+  `setInterval`, and for the terminal: recursion (`tree`, `grep`),
+  destructuring with rest (`const [name, ...args]`), `Object.hasOwn`,
+  `Object.keys` / `Object.entries`, `padStart` / `padEnd`, and
+  `textContent` instead of `innerHTML` to prevent XSS.
 - **GitHub REST API**: public repository data and language statistics
   (no authentication needed).
 - **Google Fonts**: Fraunces (headings) and Inter (body text).
@@ -268,18 +309,31 @@ Full technical details are in
 
 ## AI Usage Summary
 
-I used **Claude (Anthropic)** as a step-by-step tutor throughout this
-assignment. Claude explained each feature in Arabic first, then gave me
-the code with blanks that I filled in myself, and reviewed my answers
-before each commit. I made my own decisions along the way: I replaced
-the suggested GitHub "stars" with a language breakdown because stars are
-not meaningful for student projects. All AI-assisted commits are
-marked with `Assisted-by: Claude (Claude Opus 5.5)`.
+For this assignment I used **Claude (Anthropic)** as a step-by-step
+tutor, just as I did in Assignment 3. For each part, Claude first
+explained the idea in Arabic and then gave me code with blanks for me
+to complete. Before every commit, it reviewed what I had written. When
+a step felt too large, I asked Claude to break it into smaller pieces
+and explain them the way a teacher would. That way I understood the
+work instead of only getting it done.
 
-Getting the explanation first gave me a clear picture of the concept before I had to apply it, so when I filled in the blanks I understood why each answer was correct instead of just guessing.
+What I decided and did myself:
+- I came up with the **terminal idea** and linked it to my own Java
+  File System Simulator project.
+- I chose to put the terminal in its own **section** on the page
+  instead of opening it from a pop-up button.
+- I **found bugs during testing**: the message box could be dragged
+  outside the form, and in dark mode the terminal blended into the page.
+- I ran every test on my own devices (browsers on Windows and my
+  iPhone), took and compressed the screenshots, and wrote the personal
+  motivation section of this README.
 
-A full breakdown of tools used, benefits, challenges, learning outcomes,
-and the usage log is available in
+Claude also drafted parts of the documentation and the slides. I
+reviewed and edited them. Every commit made with AI help is marked
+with `Assisted-by: Claude (Claude Opus 5.5)`.
+
+The full list of tools, the benefits, challenges and learning outcomes,
+the usage log, and the declaration are in
 [`docs/ai-usage-report.md`](docs/ai-usage-report.md).
 
 ---
