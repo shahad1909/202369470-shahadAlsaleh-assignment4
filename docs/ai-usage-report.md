@@ -1,4 +1,4 @@
-# AI Usage Report — Assignment 3
+# AI Usage Report — Assignment 4
 
 **Student:** Shahad Sultan Alsaleh
 **Student ID:** 202369470
@@ -8,34 +8,44 @@
 ## 1. Tools Used & Use Cases
 
 ### Claude (Anthropic), model: Claude Opus 5.5
-I used Claude as a step-by-step tutor for the whole assignment, in one
-conversation (C01). I shared the course repository (with the Assignment 3
-requirements) and my Assignment 2 repository, and asked Claude to first
-explain the assignment in Arabic, then guide me through it one small part
-at a time.
+I used Claude in two conversations:
 
-- **Understanding the requirements:** Claude explained each section of
-  the assignment in Arabic and compared it with what my Assignment 2
-  site already had, so I knew exactly what was missing.
-- **Planning:** we split the work into 10 steps (repository setup → HTML
-  → CSS → JavaScript → performance → documentation) and mapped each step
-  to a requirement (API, Complex Logic, State Management, Performance).
-- **Fill-in-the-blank code:** for every step, Claude first explained the
-  concept, then gave me the code with numbered blanks (`___1___`) and
-  hints. I filled in every blank myself, sent my answers back, and
-  Claude checked them before I committed. Claude also told me exactly
-  which file and line to put each piece of code in.
-- **Code review and debugging:** I pasted my full `script.js` and
-  screenshots of my editor, DevTools Network tab, and Console, and
-  Claude helped me find problems (see section 4).
-- **Performance testing:** Claude guided me in publishing the site on
-  GitHub Pages and testing it with PageSpeed Insights, then explained
-  each Lighthouse warning and how to fix it.
-- **Git help:** copying my Assignment 2 repository into the new
-  repository with its history, and a commit message for each step.
+- **C01 (main session):** building, testing, and documenting the
+  terminal. I shared the course repository and my Assignments 1–3
+  repositories, and Claude explained the Assignment 4 requirements in
+  Arabic and compared them with what my site already had.
+- **C02 (presentation session):** planning the slides, drafting the
+  slides and the video script (described in the Presentation section
+  below).
+
+How I used Claude in C01:
+
+- **Understanding the requirements:** Claude explained each requirement
+  and the rubric in Arabic, and pointed out that half of the grade is on
+  documentation and presentation, so we planned time for them.
+- **Planning:** we split the work into 11 steps over three days
+  (repository → terminal HTML/CSS → JavaScript → mobile → testing →
+  documentation → presentation → AI report).
+- **Turning my idea into a design:** I suggested a terminal similar to my
+  own project. Claude read my File System Simulator repository and
+  proposed a portfolio "file system" with the same commands (`ls`, `cd`,
+  `pwd`, `cat`, `tree`, `grep`).
+- **Fill-in-the-blank code:** for every small step, Claude explained the
+  concept first, then gave me the code with numbered blanks (`___1___`)
+  and hints. I filled in every blank, sent my answers, and Claude checked
+  them before I saved and committed.
+- **Code review:** Claude reviewed my `script.js` from Assignment 3 and
+  found indentation and spacing problems, which I fixed line by line.
+- **Testing:** Claude wrote 44 test cases with the expected results, and
+  guided me through Lighthouse, browser testing, and compressing a
+  screenshot with Squoosh.
+- **Debugging help:** I shared screenshots of DevTools and my Git Bash
+  output, and Claude explained what was wrong (see section 4).
+- **Git help:** copying my Assignment 3 repository with its history, and
+  a commit message for each step, marked with `Assisted-by`.
 - **Documentation drafts:** Claude drafted the README, the technical
-  documentation, and this report. I reviewed, corrected, and added to
-  them.
+  documentation, and this report, section by section. I reviewed,
+  corrected, and added to them.
 
 ---
 
@@ -43,143 +53,140 @@ at a time.
 
 ### Benefits
 
-- Claude explained the code in Arabic before each step, which made it easier for me to understand the requirements and new concepts.
-- Filling in the blanks myself helped me think about the code instead of just copying and pasting it.
-- Knowing exactly which file and line to use made adding each feature easier.
-- Getting feedback after each step helped me find mistakes before committing my changes.
-- I learned how to use DevTools, especially the Network, Console, and Application tabs, and Lighthouse for checking performance.
-
+- Whenever a step felt too big, I asked Claude to break it into smaller
+  steps and explain them the way a teacher would. Taking one small piece
+  at a time helped me understand each idea without getting lost.
+- Claude linked new ideas to things I already knew. For example, the
+  terminal paths work like the stack I used for `pwd` in my Java
+  project, and `tree` uses recursion the same way my Java tree does.
+- Filling in the blanks myself made me think about every line. The short
+  "why" explanations, such as why `textContent` is safer than
+  `innerHTML`, taught me more than the code itself.
+- The 44 test cases with expected results kept my testing organized and
+  let me check every command quickly.
+- I learned to check things on my own, using DevTools (the box model in
+  the Computed tab) and the terminal (`git status`, `ls`, `file`).
 
 ### Challenges
 
-- Small spelling mistakes in function names, such as writing `updateproject()` instead of `updateProjects()`, caused errors.
-- The language percentages did not appear at first, even though my code was correct. I had to use the Network tab to find the problem.
-- I reached the GitHub API limit (403) while testing, which made it harder to test the feature.
+- By mistake, I cloned the new repository inside my Assignment 3 folder
+  and had to move it out.
+- My changes did not show up on the live site because of the browser
+  cache. At first, I also could not tell whether I was looking at Live
+  Server or the live site.
+- When I pasted several Git commands at once, the first letter got cut
+  off, so nothing was committed.
+- Windows hid the real file extension of my screenshot, so `git add`
+  could not find the file.
+- At first, the blanks came too quickly and some steps introduced too
+  many new ideas at once. I felt distracted until we switched to smaller
+  steps.
 
 ---
 
 ## 3. Learning Outcomes
 
-
 During this assignment, I learned and practised the following concepts and tools:
 
-
-- **JavaScript arrays:** `map`, `sort` with a compare function
-  (negative / positive / zero), `filter`, `reduce`, `slice`, `includes`,
-  `join`, `push`, `Array.from`, and the spread operator `[...]`.
-- **Objects:** `Object.values`, `Object.entries`, and destructuring
-  (`([name, bytes]) => ...`).
-- **Async code:** that `async` functions return Promises, starting
-  requests in parallel with `map`, and the difference between
-  `Promise.all` and `Promise.allSettled`.
-- **DOM:** `dataset` and `data-` attributes, `closest`,
-  `createElement`, `after`, `appendChild` moving an existing element,
-  and the `hidden` attribute.
-- **State management:** keeping the current state in variables, saving
-  it in `localStorage`, and validating saved values before using them.
-- **CSS:** specificity (`.project-row[hidden]` beating `.project-row`),
-  `:focus-visible`, `flex-wrap`, and why `var(--surface)` is better
-  than `white` for dark mode.
-- **Scope:** a variable declared inside `{ }` does not exist outside it.
-- **Performance:** render-blocking resources, `preconnect`, forced
-  reflow, and loading only the font weights that are used.
-- **Accessibility:** WCAG contrast ratios, the `<main>` landmark, and
-  `aria-pressed`.
-- **Tools:** GitHub Pages, PageSpeed Insights / Lighthouse, and the
-  DevTools Network, Console, and Application tabs.
-- **Debugging:** checking the Network tab to tell if a problem is in my
-  code or in the data.
+- **Data structures in JavaScript:** representing a file system as
+  nested objects (a folder is an object, a file is a string) and telling
+  them apart with `typeof`, the same idea as my Java tree.
+- **Recursion:** a function that calls itself for every sub-folder
+  (`printTree`, `grepFolder`), and returning a count from a recursive
+  function.
+- **Objects:** a "command registry" object instead of a long
+  `if / else if` chain, `Object.keys`, `Object.entries`, and why
+  `Object.hasOwn` is safer than `commands[name]` (inherited names like
+  `toString`).
+- **Arrays and strings:** destructuring with rest
+  (`const [name, ...args]`), `split(/\s+/)`, `join`, `push` / `pop`,
+  copying with `[...array]`, `startsWith`, `includes`, `padStart`,
+  `padEnd`, `trim`, and `toLowerCase`.
+- **Events:** `submit` with `preventDefault()`, `keydown` with `e.key`,
+  and `click`; using a `<form>` so Enter works on phones too.
+- **Security:** XSS, and why `textContent` is safe and `innerHTML` is not
+  for text typed by users.
+- **Accessibility:** `aria-live`, `aria-label`, `aria-hidden`,
+  `:focus-within`, and avoiding a keyboard trap.
+- **CSS:** `white-space: pre-wrap`, `overflow-y: auto`, `:nth-child`,
+  `resize: vertical`, the box model in DevTools, and why the `monospace`
+  font alone shrinks text.
+- **Mobile:** iPhone Safari zooms into inputs under 16px, and
+  `autocapitalize="off"` stops the first letter from becoming capital.
+- **Testing and tools:** writing test cases, testing on three browser
+  engines, Lighthouse, Squoosh image compression, browser cache and hard
+  refresh, Live Server vs the live site, and Git (`mv`, `file`,
+  `git status`, committing one command at a time).
 
 ---
 
 ## 4. Responsible Use & Modifications
 
-I filled in every blank in the code myself, and only committed after
-testing each step in the browser. I also made my own decisions and
-changes:
+I filled in every blank in the code myself, tested each step in the
+browser, and only committed after it worked. I also made my own decisions
+and changes:
 
-- **Rejected an AI suggestion:** Claude suggested showing each
-  repository's GitHub star count. I rejected it because stars are almost
-  always 0 for student projects, and proposed showing the percentage of
-  each programming language instead. Claude then helped me build my idea.
-- **Chose a different method:** Claude's hint pointed to
-  `Promise.all`; I answered `Promise.allSettled`, which waits for every
-  request even if one fails. We kept my choice because it is safer.
-- **Found a missing section in the AI's draft:** the first README draft
-  left out the Accessibility section. I noticed it and asked for it to
-  be added back, updated with the Assignment 3 changes.
-- **Investigated a bug with DevTools:** when the language percentages
-  did not appear, I checked the Network tab and the Response, and found
-  that GitHub returned `{}`. The real cause was that my project
-  repositories contained only `.zip` files. I uploaded the real source
-  files to all three repositories, so the percentages now work and my
-  projects are easier to view on GitHub.
-- **My own improvement:** I improved the Try again behavior by using `loadRepoInfo(metaEl).then(updateProjects)`. This makes the project list update after the repository information finishes loading.
-- **Tested on a real device:** I opened the live site on my iPhone in
-  Safari and checked the main features.
-- **Reviewed all documentation:** I read the README, technical
+- **My idea:** the terminal was my idea, and I chose to connect it to my
+  own Java File System Simulator, so it shows my real work.
+- **My design choice:** I chose a fixed section on the page instead of a
+  button that opens a pop-up.
+- **Changed how I used the AI:** when the steps were too big and there
+  were too many questions, I asked Claude to split the work into smaller
+  steps and explain like a teacher. I wanted to understand, not only to
+  finish.
+- **Found a bug myself:** while testing, I noticed that the message box
+  in the contact form could be dragged outside the form. Claude explained
+  the `resize` property, and I fixed it.
+- **My own value:** for the terminal height on phones, I chose `280px`
+  instead of the suggested `300px`.
+- **Checked before adding:** before adding the Testing section to the
+  technical documentation, I asked whether it was required, and added it
+  after understanding why it matters (the README links to it).
+- **Learned from my mistakes:** when I answered `parts` for the
+  `updatePrompt` blank, Claude explained that it is not defined in that
+  function, and I understood scope and used `currentPath`.
+- **Verified with tools, not only trust:** I checked the border with the
+  DevTools box model, checked the screenshot type with `file`, and
+  confirmed every commit with `git status` and `git push` output.
+- **Tested on real devices:** I ran all 44 test cases on the live site,
+  and tested on Chrome, Edge, Firefox, and Safari on my iPhone. I took
+  and compressed the screenshots myself.
+- **Reviewed all documentation:** I read the README, the technical
   documentation, and this report, checked them against what I actually
-  did, and wrote the parts marked for me in my own words.
-  - **Caught an inaccurate AI statement:** Claude said that "Newest" and
-  "Oldest" would give a similar order because all repositories were
-  created on the same day. I tested it and saw that the orders were
-  different, because `created_at` includes the exact time. I corrected
-  the technical documentation.
-
----
-
-### Presentation (slides, script, and video)
-
-Claude drafted the slides and the video script. I reviewed them,
-asked for changes, and edited them myself:
-
-- **Script:** I removed the list of Assignment 1–3 features from the
-  overview, and a sentence I didn't need in the "What's new" part. The
-  first draft of the live demo jumped between sections, so I asked for
-  it to follow the site from top to bottom, one section at a time. I
-  asked Claude to check whether there was time to name the two bugs I
-  found, and added them briefly. I asked how to pronounce the terminal
-  commands, and had each command's meaning added the first time it
-  appears, so viewers who don't know the terminal can follow. I asked
-  for the whole script in English in one block, because mixed Arabic
-  and English text was hard to read, and for an organized copy outside
-  the slides to practise with during the live demo.
-- **Slides:** I replaced the home page screenshot with my own
-  screenshot of the live site, because the first one did not show my
-  real font. Slides 4, 7, and 10 used a dark theme, and I asked for them
-  to match the light theme of the other slides. I decided not to add
-  more pictures to the Outcomes slide, to keep it clear. I asked for my
-  two bug screenshots (the message box and the terminal in dark mode)
-  to be added to the AI Integration slide. I also edited the slides
-  myself: [your edits, e.g. the course code on the cover].
-- **Checked the rules first:** I checked that the requirements allow
-  AI for the presentation as long as it is declared.
-- **Video:** I recorded the video and the voice myself. No AI was used
-  for the voice-over or video editing. I practised with the script to
-  keep the video under 7 minutes ([final length]).
+  did, and wrote my personal motivation in my own words.
+- **Kept the documentation accurate:** Claude's first README draft said
+  that I found the dark-mode visibility problem, but Claude had noticed
+  it in my phone screenshot. We corrected the README so it only lists the
+  bug I found myself.
 
 ## 5. AI Usage Log
 
 | ID | Tool (model) | Date | Purpose | Files affected | What you changed and how you verified it |
 |----|--------------|------|---------|----------------|------------------------------------------|
-| C01 | Claude (Claude Opus 5.5) | 2026-11-21 | Full step-by-step session: explaining the requirements in Arabic, planning, fill-in-the-blank code for every step, reviews, debugging, performance testing, Git help, and documentation drafts. | `index.html`, `css/styles.css`, `js/script.js`, `README.md`, `docs/technical-documentation.md`, `docs/ai-usage-report.md`, `docs/images/` | Filled in all blanks myself; rejected the stars idea and proposed the language breakdown; chose `Promise.allSettled`; fixed placement mistakes. Tested every step in the browser and DevTools before committing. |
-| A01 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 1: HTML for filter buttons, sort menu, empty-state message, and `data-category`. | `index.html` | Filled in the blanks (categories, `all`, `aria-pressed`, `for`, `oldest`, `hidden`); first answered `ai` for the ML category and changed it to `ml` to match the filter button. Checked the controls in the browser. |
-| A02 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 2: CSS for the controls, empty state, hidden projects, and mobile layout. | `css/styles.css` | Filled in the blanks. Tested light and dark mode, keyboard focus (Tab), and mobile width. |
-| A03 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 3: saving GitHub dates as `data-created` and waiting for all requests. | `js/script.js` | Filled in the blanks; chose `Promise.allSettled` instead of `Promise.all`. Checked `data-created` in the Elements tab. |
-| A04 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 4: filter and sort logic (`matchesFilter`, `compareProjects`, `updateProjects`). | `js/script.js` | Filled in the blanks; fixed `updateproject()` → `updateProjects()`. Tested every filter and sort combination, and the empty state by temporarily changing a category. |
-| A05 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 5: shared `readSetting`/`saveSetting` helpers and restoring the saved filter and sort. | `js/script.js` | Filled in the blanks; removed an extra line outside the click handler and leftover comments. Tested with refresh and with an invalid saved value in Local Storage. |
-| A06 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 6: visit timer. | `index.html`, `css/styles.css`, `js/script.js` | Filled in the blanks. Tested the timer past one minute and in a background tab. |
-| A07 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 7: first a star-count suggestion (rejected), then the language breakdown code. | `js/script.js`, `css/styles.css` | Replaced the stars with my language idea; filled in the blanks. Debugged the empty `{}` response with the Network tab and fixed my project repositories. |
-| A08 | Claude (Claude Opus 5.5) | 2026-11-21 | Step 8: project renumbering, font and preconnect changes, contrast colors, `<main>`, and the forced reflow fix. | `index.html`, `css/styles.css`, `js/script.js` | Filled in the blanks; found and fixed a misplaced bracket. Verified with PageSpeed Insights (Accessibility 95 → 100; 100 in all categories on mobile and desktop). |
-| A09 | Claude (Claude Opus 5.5) | 2026-11-21 | Draft of `README.md` (two versions). | `README.md` | Noticed the missing Accessibility section; wrote my own sentence in the AI summary; corrected a statement for accuracy. |
-| A10 | Claude (Claude Opus 5.5) | 2026-11-21 | Draft of `docs/technical-documentation.md`. | `docs/technical-documentation.md` | Wrote the compatibility testing section myself and checked the technical details against my code. |
-| A11 | Claude (Claude Opus 5.5) | 2026-11-21 | Draft of this report. | `docs/ai-usage-report.md` | Wrote the benefits and challenges in my own words, reviewed the learning outcomes list, and checked every statement. |
-| C[__] | Claude (Claude Opus 5.5) | 2026-11-27 | Presentation session: slide plan, video script, slides draft, adding the bug screenshots, and help with the final commits. | `presentation/slides.pdf`, `docs/ai-usage-report.md` | Edited the script and slides as described in section 4; recorded the video and voice myself. |
-| A[__] | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of the video script. | — (used for recording) | Removed the A1–A3 feature list, reordered the demo section by section, added the two bugs and the command meanings. Timed it under 7 minutes. |
-| A[__] | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of the slides, then adding the two bug screenshots to slide 6. | `presentation/slides.pdf` | Replaced the home page screenshot, made the theme consistent, kept the Outcomes slide simple, and made my own edits. Checked every slide before exporting. |
+| C01 | Claude (Claude Opus 5.5) | 2026-11-26 to 2026-11-27 | Main session: explaining the requirements and rubric in Arabic, planning, fill-in-the-blank code for every step of the terminal, reviews, testing, debugging, Git help, and documentation drafts. | `index.html`, `css/styles.css`, `js/script.js`, `README.md`, `docs/technical-documentation.md`, `docs/ai-usage-report.md`, `docs/images/` | Filled in all blanks myself; asked for smaller steps; found the message box bug; tested every step in the browser before committing. |
+| A01 | Claude (Claude Opus 5.5) | 2026-11-26 | Review of my Assignment 3 `script.js` (indentation and extra blank lines). | `js/script.js` | Fixed each place myself, one at a time, and checked the file still worked. |
+| A02 | Claude (Claude Opus 5.5) | 2026-11-26 | Terminal HTML: nav link, section, window, output area, and input form. | `index.html` | Filled in the blanks (`#terminal`, `true`, `polite`, `off`/`false`). Checked the structure in the browser and Elements tab. |
+| A03 | Claude (Claude Opus 5.5) | 2026-11-26 | Terminal CSS: section background, window, title bar, output, input line, and `--font-mono`. | `css/styles.css` | Filled in the blanks (`--bg-alt`, `hidden`, `flex`, `50%`, `pre-wrap`, `focus-within`, `1rem`). Checked light and dark mode. |
+| A04 | Claude (Claude Opus 5.5) | 2026-11-26 | Terminal JavaScript basics: `submit`, `printLine`, `help`, `clear`, `runCommand`, and the welcome message. | `js/script.js` | Filled in the blanks. Tested `help`, `HELP`, `hello`, `toString`, and `<b>hi</b>` (shown as text). |
+| A05 | Claude (Claude Opus 5.5) | 2026-11-26 | File system data, path helpers (`resolvePath`, `getNode`, `formatPath`), `ls`, `cd`, and the prompt. | `js/script.js` | Filled in the blanks; corrected my `parts` answer to `currentPath` after understanding scope. Tested `cd projects`, `cd ..`, `cd about.txt`, and `cd` alone. |
+| A06 | Claude (Claude Opus 5.5) | 2026-11-26 | `pwd`, `cat`, and the recursive `tree` and `grep`. | `js/script.js` | Filled in the blanks. Tested each command with correct and wrong input. |
+| A07 | Claude (Claude Opus 5.5) | 2026-11-26 | `theme`, `open`, `history`, and ↑/↓ navigation. | `js/script.js` | Filled in the blanks. Tested the theme after a refresh, the links, and the arrow keys. |
+| A08 | Claude (Claude Opus 5.5) | 2026-11-26 | Tab autocomplete, captured only when the input has text. | `js/script.js` | Filled in the blanks. Tested completion and that Tab on an empty input moves to the contact form. |
+| A09 | Claude (Claude Opus 5.5) | 2026-11-26 | Click-to-focus and mobile styles for the terminal. | `js/script.js`, `css/styles.css` | Filled in the blanks; chose `280px` instead of `300px`. Tested with DevTools (iPhone SE) and on my iPhone. |
+| A10 | Claude (Claude Opus 5.5) | 2026-11-26 | Fixes: `resize: vertical` for the message box (bug I found), `1rem` form font (iPhone zoom), and a border for dark mode. | `css/styles.css` | Applied and tested each fix; confirmed the border with the DevTools box model on Live Server. |
+| A11 | Claude (Claude Opus 5.5) | 2026-11-26 | 44 terminal test cases with expected results. | `docs/technical-documentation.md` | Ran all 44 on the live site; ran the main ones on Chrome, Firefox, and Safari (iPhone). |
+| A12 | Claude (Claude Opus 5.5) | 2026-11-26 to 2026-11-27 | Draft of `README.md`, section by section. | `README.md` | Wrote my personal motivation myself, edited the description, and corrected the "bugs I found" line for accuracy. |
+| A13 | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of the technical documentation updates (sections 8–15). | `docs/technical-documentation.md` | Checked the details against my code and added the Testing section after asking whether it was required. |
+| A14 | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of this report, section by section. | `docs/ai-usage-report.md` | Edited the benefits and challenges in my own words and checked every statement against what happened. |
+| C02 | Claude (Claude Opus 5.5) | 2026-11-27 | Presentation session: slide plan, video script, slides draft, adding the bug screenshots, and help with the final commits. | `presentation/slides.pdf`, `docs/ai-usage-report.md` | Edited the script and slides as described in the Presentation section; recorded the video and voice myself. |
+| A15 | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of the video script. | — (used for recording) | Removed the A1–A3 feature list, reordered the demo section by section, added the two bugs and the command meanings. Timed it under 7 minutes. |
+| A16 | Claude (Claude Opus 5.5) | 2026-11-27 | Draft of the slides, then adding the two bug screenshots to slide 6. | `presentation/slides.pdf` | Replaced the home page screenshot, made the theme consistent, kept the Outcomes slide simple, and made my own edits. Checked every slide before exporting. |
 
-The full, unedited conversation (C01) is included in the AI Evidence ZIP
-submitted on Blackboard. The original AI outputs before my edits (A01–A11), including the code templates with blanks and the documentation drafts, are in the `artifacts/` folder of the ZIP.
+The full, unedited conversations (C01 and C02) are included in the AI
+Evidence ZIP submitted on Blackboard. The original AI outputs before my
+edits (A01–A16), including the code templates with blanks, the test
+cases, the documentation drafts, the slides draft, and the video script,
+are in the `artifacts/` folder of the ZIP.
 
 ---
 
@@ -189,4 +196,4 @@ submitted on Blackboard. The original AI outputs before my edits (A01–A11), in
 
 **Name:** Shahad Sultan Alsaleh
 **Student ID:** 202369470
-**Date:**  2026-11-21
+**Date:** 2026-11-27
