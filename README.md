@@ -104,7 +104,6 @@ command.
   missing before you send.
 
 ### Features carried over from Assignments 1–3
-### Features carried over from Assignments 1–3
 - The layout is fully responsive and works on desktop, tablet, and mobile (using Flexbox and Grid).
 - A dark / light theme that is saved in `localStorage`.
 - The projects can be filtered (All, Software, Hardware, Machine Learning) and sorted
@@ -195,37 +194,6 @@ passed on the live site. You can find the full list in
 ---
 
 ## Setup Instructions
-
-### Option 1: Open the live site
-Visit https://shahad1909.github.io/202369470-shahadAlsaleh-assignment4/.
-Nothing to install.
-
-### Option 2: Run locally
-No installation or build tools are required. This is a static website.
-
-1. **Clone** this repository:
-   ```bash
-   git clone https://github.com/shahad1909/202369470-shahadAlsaleh-assignment4.git
-   ```
-2. **Navigate** into the project folder:
-   ```bash
-   cd 202369470-shahadAlsaleh-assignment4
-   ```
-3. **Open `index.html`** in your browser:
-   - Double-click the file, **or**
-   - Right-click it, choose "Open with", and pick your browser, **or**
-   - Use the VS Code **Live Server** extension for auto-reload while editing.
-4. **Check that it works:** scroll to the **Terminal** section, type
-   `help`, and press Enter. You should see the list of commands.
-
-> **Notes:**
-> - An internet connection is needed for Google Fonts and the GitHub
->   data. Without it, the site (including the terminal) still works and
->   shows a friendly error message with a **Try again** button.
-> - GitHub allows **60 API requests per hour** per network without
->   login, and each page load uses 6. If you refresh many times, the
->   GitHub info may be unavailable for a while; it comes back on its own.
->   The terminal does not use the GitHub API, so it is never affected.## Setup Instructions
 
 ### Option 1: Open the live site
 Visit https://shahad1909.github.io/202369470-shahadAlsaleh-assignment4/.
