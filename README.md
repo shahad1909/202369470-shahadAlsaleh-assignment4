@@ -322,8 +322,8 @@ What I decided and did myself:
   File System Simulator project.
 - I chose to put the terminal in its own **section** on the page
   instead of opening it from a pop-up button.
-- I **found bugs during testing**: the message box could be dragged
-  outside the form, and in dark mode the terminal blended into the page.
+- I **found a bug during testing**: the message box could be dragged
+  outside the form.
 - I ran every test on my own devices (browsers on Windows and my
   iPhone), took and compressed the screenshots, and wrote the personal
   motivation section of this README.
